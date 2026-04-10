@@ -5,7 +5,7 @@ import {
   deleteArtist,
   toggleArtistPublished,
 } from './artistsThunks';
-import type {Artist} from './types';
+import type {Artist} from '../../types';
 
 interface ArtistsState {
   items: Artist[];

@@ -49,8 +49,12 @@ artistsRouter.delete('/:id', auth, async (req, res, next) => {
       return res.status(404).send({error: 'Artist not found'});
     }
 
-    const isAdmin = request.user!.role === 'admin';
-    const isOwner = artist.user.toString() === request.user!._id.toString();
+    if (!request.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
+
+    const isAdmin = request.user.role === 'admin';
+    const isOwner = artist.user && artist.user.toString() === request.user._id.toString();
 
     if (!isAdmin && !(isOwner && !artist.isPublished)) {
       return res.status(403).send({error: 'Forbidden'});
