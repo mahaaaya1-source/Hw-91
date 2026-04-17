@@ -32,6 +32,18 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     default: 'user',
     enum: ['user', 'admin'],
   },
+  displayName: {
+    type: String,
+    required: true,
+  },
+  avatar: {
+    type: String,
+    default: null,
+  },
+  googleID: {
+    type: String,
+    default: null,
+  },
 });
 
 UserSchema.pre('save', async function() {
@@ -43,7 +55,6 @@ UserSchema.pre('save', async function() {
 
   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
   user.password = await bcrypt.hash(user.password, salt);
-  ;
 });
 
 UserSchema.methods.checkPassword = async function(password: string) {
