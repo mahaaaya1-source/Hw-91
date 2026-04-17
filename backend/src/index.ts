@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/public', express.static('public'));
 
-// ✅ ВАЖНО — добавить все роуты
+
 app.use('/users', usersRouter);
 app.use('/artists', artistsRouter);
 app.use('/albums', albumsRouter);
