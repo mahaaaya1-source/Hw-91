@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {loginUser, logoutUser, registerUser} from './usersThunks';
+import {googleLogin, loginUser, logoutUser, registerUser} from './usersThunks';
 import type {UsersState, User} from '../../types';
 
 const getStoredUser = (): User | null => {
@@ -57,6 +57,20 @@ const usersSlice = createSlice({
       .addCase(loginUser.rejected, (state) => {
         state.loginLoading = false;
         state.loginError = 'Login failed';
+      })
+
+      .addCase(googleLogin.pending, (state) => {
+        state.loginLoading = true;
+        state.loginError = null;
+      })
+      .addCase(googleLogin.fulfilled, (state, {payload}) => {
+        state.loginLoading = false;
+        state.user = payload;
+        localStorage.setItem('user', JSON.stringify(payload));
+      })
+      .addCase(googleLogin.rejected, (state) => {
+        state.loginLoading = false;
+        state.loginError = 'Google login failed';
       })
 
       .addCase(logoutUser.pending, (state) => {

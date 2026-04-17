@@ -1,7 +1,8 @@
-import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useState} from 'react';
+import {GoogleLogin} from '@react-oauth/google';
 import {useAppDispatch} from '../../app/hooks';
-import {loginUser} from './usersThunks';
+import {googleLogin, loginUser} from './usersThunks';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,11 @@ const Login = () => {
     e.preventDefault();
 
     await dispatch(loginUser(form)).unwrap();
+    navigate('/');
+  };
+
+  const googleLoginHandler = async (credential: string) => {
+    await dispatch(googleLogin(credential)).unwrap();
     navigate('/');
   };
 
@@ -50,6 +56,19 @@ const Login = () => {
       />
 
       <button type="submit">Login</button>
+
+      <div style={{paddingTop: '12px'}}>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            if (credentialResponse.credential) {
+              void googleLoginHandler(credentialResponse.credential);
+            }
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
+      </div>
     </form>
   );
 };

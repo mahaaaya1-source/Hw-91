@@ -10,12 +10,24 @@ const Register = () => {
   const [form, setForm] = useState({
     username: '',
     password: '',
+    displayName: '',
+    avatar: null as File | null,
   });
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value, files} = e.target;
+
+    if (name === 'avatar' && files) {
+      setForm((prev) => ({
+        ...prev,
+        avatar: files[0],
+      }));
+      return;
+    }
+
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
@@ -47,6 +59,20 @@ const Register = () => {
         value={form.password}
         onChange={changeHandler}
         placeholder="Password"
+      />
+
+      <input
+        type="text"
+        name="displayName"
+        value={form.displayName}
+        onChange={changeHandler}
+        placeholder="Display Name"
+      />
+
+      <input
+        type="file"
+        name="avatar"
+        onChange={changeHandler}
       />
 
       <button type="submit">Register</button>
